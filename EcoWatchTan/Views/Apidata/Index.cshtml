@@ -1,0 +1,218 @@
+﻿@model List<EcoWatch.Models.ApiData.WeatherData>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Weather App</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand&display=swap" rel="stylesheet">
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="img/favicon.png" type="image/x-icon" />
+    <!-- Layout -->
+    <link rel="stylesheet" href="css/FlexboxLayout.css" />
+    <!-- custom CSS -->
+    <link rel="stylesheet" href="css/main.css" />
+    <!-- Font Awesome -->
+    <script src="https://kit.fontawesome.com/981b24df00.js" crossorigin="anonymous"></script>
+    <!-- Script -->
+    <script src="js/weather.js" defer></script>
+</head>
+<body>
+    </br> </br> </br> 
+    <div class="loader-container ">
+        <span class="loader"></span>
+    </div>
+    <div class="container-fluid ">
+        <!-- App Container -->
+        <div class="app">
+            <div class="alert show">
+                <div class="alert-body">
+                    Default Location Loaded
+                </div>
+                <div class="close-btn">&times;</div>
+            </div>
+            <!-- Row -->
+            <div class="row main-content ">
+                <!-- Left Column -->
+                <div class="col-lg-4">
+                    <div class="left-side">
+                        <!-- Input City Name -->
+                        <form action="#">
+                            <div class="form-group" style="color:white">
+                               
+                            </div>
+                        </form>
+
+
+                        <!-- Today Weather Sumamry -->
+                      <div class="weather-summary">
+
+                            <div class="weather-img ">
+            @foreach (var weatherData in Model)
+             { @if (weatherData.Weather.Any(w => w.Id == 800)) // Clear sky
+            {
+                <img src="https://www.accuweather.com/images/weathericons/1.svg" alt="Clear Sky">
+            }
+            else if (weatherData.Weather.Any(w => w.Id == 801 || w.Id == 802)) // Few clouds or scattered clouds
+            {
+                <img src="https://www.accuweather.com/images/weathericons/3.svg" alt="Few Clouds">
+            }
+            else if (weatherData.Weather.Any(w => w.Id == 803 || w.Id == 804)) // Broken clouds or overcast clouds
+            {
+                <img src="https://www.accuweather.com/images/weathericons/6.svg" alt="Cloudy">
+            }
+            else if (weatherData.Weather.Any(w => w.Id >= 200 && w.Id < 600)) // Rainy weather
+            {
+                <img src="https://www.accuweather.com/images/weathericons/12.svg" alt="Rainy">
+            }
+            else // Default icon
+            {
+                <img src="https://www.accuweather.com/images/weathericons/7.svg" alt="Weather Icon">
+            }
+        
+    }</div>
+
+                            @foreach (var weatherData in Model)
+                            {
+                                <div class="temperature">
+                                    <p><span class="value">@weatherData.Main.Temp</span>&deg; <span class="unit-format">C</span></p>
+                                    @foreach (var weather in weatherData.Weather)
+                                    {
+                                        <p class="weathertext"> @weather.Description</p>
+                                    }
+                                   
+                                </div>
+                                <hr style="margin-left: 72px;">
+                                <div class="date-info">
+                                    <p class="date">@weatherData.Dt</p>
+                                   
+                                    <p class="daystatus"></p>
+                                </div>
+
+                                <div class="location-info">
+                                    <p class="location">@weatherData.Name</p>
+                            </div>}
+                        </div>
+                    </div>
+                </div>
+                <!-- Right Column -->
+                <div class="col-lg-8">
+                    <div class="right-side rounded-5">
+                       </br>
+
+                        <!-- Row 1 -->
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <div class="weather-info-box">
+                                    @foreach (var weatherData in Model){
+                                    <p class="title">Wind</p>
+                                    <p class="value"><span class="wind">@weatherData.Wind.Speed</span> KM/h</p>
+                                        <p class="wind-direction">@weatherData.Wind.Deg</p>
+                                    }
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="weather-info-box">
+                                    @foreach (var weatherData in Model){
+                                    <p class="title">Humidity</p>
+                                        <p class="value"><span class="humidity">
+                                                @weatherData.Main.Humidity<span>%</span>
+                                            </span>
+
+                                        </p>
+                                    <p>&nbsp;</p>}
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="weather-info-box">
+                                      @foreach (var weatherData in Model){
+                                    <p class="title">Real Feel</p>
+                                        <p class="value "><span class="real-feel"> @weatherData.Main.FeelsLike</span><span>&deg; C</span>
+
+                                        </p>
+                                    <p>&nbsp;</p>}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Row 2 -->
+                        <div class="row mt">
+                            <div class="col-lg-4">
+                                @foreach (var weatherData in Model)
+                                {
+                                    <div class="weather-info-box">
+                                        <p class="title">Coordinates</p>
+                                        <p class="value UV">@weatherData.Coord.Lon</p>
+                                        <p class="value UV">@weatherData.Coord.Lat</p>
+                                </div>}
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="weather-info-box">
+                                     @foreach (var weatherData in Model){
+                                    <p class="title">Pressure</p>
+                                        <p class="value"><span class="pressure"> @weatherData.Main.Pressure</span> <span class="pressure-unit">mbbar</span></p>
+                                    <p class="pressureTend">Rising</p>} </br>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="weather-info-box">
+                                    <p class="title">Change of rain</p>
+                                    <p class="value"><span class="changeOfRain">69</span>%</p>
+                                    <p class="changeOfRainSituation">Day</p> </br>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Row 3 -->
+                        <div class="row mt">
+                            <div class="col-lg-4">
+                                <div class="weather-info-box" >
+                                     @foreach (var weatherData in Model){
+                                    <p class="title">Temperature History</p>
+                                        <p class="value" style="font-size: 24px;">
+                                            <i class="fa-solid fa-up-long" style="color:#fcacac"></i> <span class="HiTem"> 10 </span><span>&deg; C</span></p>
+                                        <p class="value" style="font-size: 24px;"><i class="fa-solid fa-down-long" style="color:#b0ffd5"></i> <span class="LowTem">24</span><span>&deg; C</span></p>
+                                    }
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="weather-info-box">
+                                      @foreach (var weatherData in Model){
+                                    <p class="title">Sun</p>
+                                    <p class="value" style="font-size: 24px;">
+                                            <span style="font-size: 16px;">Rise</span> <span class="sunRise">@weatherData.Sys.Sunrise<span></span>
+                                    </p>
+                                    <p class="value" style="font-size: 24px;">
+                                        <span style="font-size: 16px;">Set</span> <span class="sunSet">@weatherData.Sys.Sunset<span></span>
+                                    </p>}
+                                </div>
+                            </div>
+                           
+                          <div class="col-lg-4">
+                                <div class="weather-info-box">
+                                      @foreach (var weatherData in Model){
+                                    <p class="title">Visibility</p>
+                                    <p class="value" style="font-size: 24px;">
+                                            <span style="font-size: 16px;">Rise</span> <span class="sunRise">@weatherData.Visibility<span></span>
+                                    </p>
+                                    } </br> 
+                                </div>
+                            </div>
+                        </div>
+                       
+                       
+
+                       
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </br> </br> 
+
+</body>
+</html>

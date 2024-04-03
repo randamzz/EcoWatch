@@ -1,0 +1,43 @@
+html {
+    font-size: 14px;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    margin-bottom: 60px;
+}
+
+
+
+.button {
+    display: inline-block;
+    padding: 10px 20px; /* Ajustez le rembourrage selon vos besoins */
+    font-size: 16px; /* Ajustez la taille de la police selon vos besoins */
+    font-weight: bold;
+    text-decoration: none;
+    color: white;
+    background-color: #265C4C;
+    border: none;
+    border-radius: 200px; /* Ajustez le rayon de la bordure selon vos besoins */
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+    .button:hover {
+        background-color: white;
+        color: #265C4C; /* Changement de couleur de fond au survol */
+    }

@@ -1,0 +1,118 @@
+﻿@model List<WeatherDataAnalysisResult>
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drought map</title>
+
+
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        #map {
+            width: 100%;
+            height: 100vh;
+        }
+    </style>
+</head>
+<body>
+    <br />
+    <br />
+    <br />
+    <div class="loader-container ">
+        <div class="align-items-center">
+            <div class="">
+                <h1 class=" text-black">Moroccan Drought Map: City-Specific Statistics at <span class="text-gradient fw-bold">Your Fingertips</span></h1>
+                <p class="text-primary">
+                    Welcome to our interactive drought map of Morocco! With just a click on your city, you can access detailed statistics including scores and average conditions. Explore the map to gain insights into drought levels across the country.
+                </p>
+            </div>
+        </div>
+    <div id="map" class="rounded-5">
+    <!-- Leaflet JavaScript -->
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <!-- JavaScript file containing GeoJSON data -->
+    <script src="~/lib/regions_maroc.js"></script>
+
+    <script>
+        var map = L.map('map').setView([31.7917, -7.0926], 6);
+
+        // Add base tile layer
+        var osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+        var Esri_WorldStreetMap = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+            attribution: 'Tiles &copy; Esri &mdash; Source: Esri, DeLorme, NAVTEQ, USGS, Intermap, iPC, NRCAN, Esri Japan, METI, Esri China (Hong Kong), Esri (Thailand), TomTom, 2012'
+        });
+        Esri_WorldStreetMap.addTo(map);
+        // Access the results data
+        var results = @Html.Raw(Json.Serialize(Model));
+
+        // Create GeoJSON layer from the data
+        var geojsonLayer = L.geoJSON(regionsMarocData, {
+            onEachFeature: function (feature, layer) {
+                // Loop through the results
+                for (var i = 0; i < results.length; i++) {
+                    if (results[i].name == feature.properties.region) {
+                        var backgroundColor;
+                        var state;
+                        if (results[i].score < 4) {
+                            backgroundColor = 'green';
+                            ccolor = 'white';
+                        }
+                        else if (results[i].score >= 4 && results[i].score < 6) {
+                            backgroundColor = '#ffc302';
+                            ccolor = 'black';
+                        }
+                        else if (results[i].score >= 6 && results[i].score < 8) {
+                                    backgroundColor = '#ff8f00';
+                                    ccolor = 'black';
+                                }
+                        else {
+                            backgroundColor = 'red';
+                            ccolor = 'white';
+                        }
+
+                        var popupContent = `
+                                        <div class="rounded-3" style="background-color: ${backgroundColor}; color: ${ccolor}; padding: 10px;">
+                                    City: ${results[i].name}<br>
+                                    Score: ${results[i].score}<br>
+                                    State: ${results[i].state}
+                                </div>
+                            `;
+                        layer.bindPopup(popupContent);
+                    }
+                            console.log("City: " + results[i].name + feature.properties.region);
+
+                }
+            }
+        }).addTo(map);
+    </script>
+
+        <br />
+        <br />
+        <br />
+    </div>
+    </div>
+
+
+
+
+
+
+
+
+
+ 
+    
+</body>
+</html>
